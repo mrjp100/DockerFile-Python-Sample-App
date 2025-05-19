@@ -1,27 +1,44 @@
-FROM python:2.7
+FROM amazonlinux:2
 
-# Creating Application Source Code Directory
+# Install required tools and Python 2.7
+RUN yum -y update && \
+    yum -y install \
+    python27 \
+    python27-pip \
+    gcc \
+    python27-devel \
+    libffi-devel \
+    openssl-devel \
+    wget \
+    unzip \
+    tar \
+    which && \
+    yum clean all
+
+# Upgrade pip to latest version for Python 2
+RUN pip2 install --upgrade pip
+
+# Create application source directory
 RUN mkdir -p /usr/src/app
 
-# Setting Home Directory for containers
+# Set working directory
 WORKDIR /usr/src/app
 
-# Installing python dependencies
+# Install Python dependencies
 COPY requirements.txt /usr/src/app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip2 install --no-cache-dir -r requirements.txt
 
-# Copying src code to Container
+# Copy application source code
 COPY . /usr/src/app
 
-# Application Environment variables
-#ENV APP_ENV development
+# Environment variables
 ENV PORT 8080
 
-# Exposing Ports
+# Expose application port
 EXPOSE $PORT
 
-# Setting Persistent data
+# Persistent volume
 VOLUME ["/app-data"]
 
-# Running Python Application
+# Start the application
 CMD gunicorn -b :$PORT -c gunicorn.conf.py main:app
