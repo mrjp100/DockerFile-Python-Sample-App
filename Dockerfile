@@ -4,19 +4,20 @@ FROM amazonlinux:2
 RUN yum -y update && \
     yum -y install \
     python27 \
-    python27-pip \
-    gcc \
     python27-devel \
+    gcc \
     libffi-devel \
     openssl-devel \
     wget \
-    unzip \
     tar \
+    unzip \
     which && \
     yum clean all
 
-# Upgrade pip to latest version for Python 2
-RUN pip2 install --upgrade pip
+# Install pip2 manually
+RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
+    python2.7 get-pip.py && \
+    rm -f get-pip.py
 
 # Create application source directory
 RUN mkdir -p /usr/src/app
