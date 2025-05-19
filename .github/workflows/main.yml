@@ -30,8 +30,8 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: 491085395209.dkr.ecr.ap-south-1.amazonaws.com
-          ECR_REPOSITORY: sample-python-web-app
-          IMAGE_TAG: latest
+          ECR_REPOSITORY: python_sample_ec2
+          IMAGE_TAG: python_ec2
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
